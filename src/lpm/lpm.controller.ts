@@ -1,18 +1,29 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { LpmService } from './lpm.service';
 import { CreateLpmDto } from './dto/create-lpm.dto';
 import { UpdateLpmDto } from './dto/update-lpm.dto';
+import { UpdateSectionDto } from './dto/update-section.dto';
 
 @Controller('lpm')
 export class LpmController {
   constructor(private readonly lpmService: LpmService) { }
 
   @Post()
-  create(@Body() createLpmDto: CreateLpmDto) {
-    return this.lpmService.create(createLpmDto);
+  createSection(@Body() createLpmDto: CreateLpmDto) {
+    return this.lpmService.createAllSection(createLpmDto);
   }
 
-  @Get('/asistencias')
+  @Patch(':id')
+  create(@Body() createLpmDto: UpdateSectionDto, @Param("id") termino: string) {
+    return this.lpmService.createInfoForSection(createLpmDto, termino);
+  }
+
+  @Get()
+  findAll() {
+    return this.lpmService.findAll();
+  }
+
+  @Get('asistencias')
   findAsist() {
     return this.lpmService.findAsistencias();
   }
@@ -33,18 +44,5 @@ export class LpmController {
   }
 
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.lpmService.findOne(+id);
-  }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLpmDto: UpdateLpmDto) {
-    return this.lpmService.update(+id, updateLpmDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.lpmService.remove(+id);
-  }
 }
