@@ -2,13 +2,12 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LpmModule } from './lpm/lpm.module';
-import { LpmService } from './lpm/lpm.service';
 import { SeedModule } from './seed/seed.module';
 
 
 
 @Module({
-  imports: [LpmModule,
+  imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: "postgres",
@@ -21,6 +20,7 @@ import { SeedModule } from './seed/seed.module';
       autoLoadEntities: true
 
     }),
+    LpmModule,
     SeedModule],
 })
 export class AppModule { }

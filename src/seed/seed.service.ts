@@ -1,25 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import { asistencias, especiales, mantenimiento, registros } from "./data/lpmsections";
+import { LpmService } from 'src/lpm/lpm.service';
+import { informacion } from "./data/lpmsections";
 
 @Injectable()
 export class SeedService {
 
-  executeAsistencias() {
-    return asistencias;
+  constructor(private lpmService: LpmService) { }
+
+  async executeInfo() {
+
+    const arraySections: any = [];
+
+    informacion.forEach(section => {
+      arraySections.push(this.lpmService.createSection(section));
+    })
+
+    await Promise.all(arraySections)
+
+    return "seed executed";
   }
 
-  executeEspeciales() {
-    return especiales;
-  }
-
-  executeMantenimiento() {
-    return mantenimiento;
-  }
-
-  executeRegistros() {
-    return registros;
-  }
-  findAll() {
-    return `This action returns all seed`;
-  }
 }

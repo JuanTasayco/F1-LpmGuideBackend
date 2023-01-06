@@ -1,48 +1,44 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseUUIDPipe } from '@nestjs/common';
 import { LpmService } from './lpm.service';
 import { CreateLpmDto } from './dto/create-lpm.dto';
 import { UpdateLpmDto } from './dto/update-lpm.dto';
 import { UpdateSectionDto } from './dto/update-section.dto';
+import { CreateContentSectionDto } from './dto/create-section.dto';
 
 @Controller('lpm')
 export class LpmController {
   constructor(private readonly lpmService: LpmService) { }
-
-  @Post()
-  createSection(@Body() createLpmDto: CreateLpmDto) {
-    return this.lpmService.createAllSection(createLpmDto);
-  }
-
-  @Patch(':id')
-  create(@Body() createLpmDto: UpdateSectionDto, @Param("id") termino: string) {
-    return this.lpmService.createInfoForSection(createLpmDto, termino);
-  }
 
   @Get()
   findAll() {
     return this.lpmService.findAll();
   }
 
-  @Get('asistencias')
-  findAsist() {
-    return this.lpmService.findAsistencias();
+  @Get(":id")
+  findOne(@Param("id") id: string) {
+    return this.lpmService.findOne(id);
   }
 
-  @Get('especiales')
-  findMant() {
-    return this.lpmService.findEspeciales();
+  @Post()
+  addSection(@Body() infoSection: CreateLpmDto) {
+    return this.lpmService.createSection(infoSection);
   }
 
-  @Get('mantenimiento')
-  findEsp() {
-    return this.lpmService.findMantenimiento();
+  @Patch('section/:id')
+  updateSection(@Body() newInfoSection: UpdateLpmDto, @Param("id", ParseUUIDPipe) termino: string) {
+    return this.lpmService.updateSection(newInfoSection, termino);
   }
 
-  @Get('registros')
-  findReg() {
-    return this.lpmService.findRegistros();
+  @Post(':id')
+  addContentSection(@Body() infoContent: CreateContentSectionDto, @Param("id") termino: string) {
+    return this.lpmService.addContentSect(infoContent, termino);
   }
 
 
+  /* no me parece necesario porque el update section de por sí me trae toda la info, guarda el objeto y lo envía incluyendo el contenido */
+  /* @Patch(':id')
+  updateContentSection(@Body() newInfoContent: UpdateSectionDto, @Param("id") termino: string) {
+    return this.lpmService.updateContentSect(newInfoContent, termino);
+  } */
 
 }

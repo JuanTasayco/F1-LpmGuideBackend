@@ -8,8 +8,8 @@ import { LpmContentImages } from './entities/lpm.images.entity';
 
 @Module({
   controllers: [LpmController],
-  imports: [SeedModule,
-    TypeOrmModule.forFeature([Lpm, LpmContentImages])],
-  providers: [LpmService]
+  imports: [TypeOrmModule.forFeature([Lpm, LpmContentImages])],
+  providers: [LpmService],
+  exports: [LpmService]
 })
 export class LpmModule { }
