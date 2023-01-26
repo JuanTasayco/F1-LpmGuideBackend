@@ -1,7 +1,7 @@
 
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { LpmContentImagesIngreso } from "./lpm.images-acceso.entity";
-import { LpmContentImages } from "./lpm.images.entity";
+import { LpmContentImagesIngreso, LpmContentImages } from "./";
+
 
 @Entity()
 export class Lpm {
@@ -24,18 +24,14 @@ export class Lpm {
     @Column({ type: "text" })
     seccion: string;
 
-    @OneToMany(
-        () => LpmContentImagesIngreso,
+    @OneToMany(() => LpmContentImagesIngreso,
         (lpmImageIngreso) => lpmImageIngreso.ingreso,
-        { eager: true }
-    )
-    ingreso: LpmContentImagesIngreso[];
+        { eager: true, cascade: true })
+    ingreso?: LpmContentImagesIngreso[];
 
-    @OneToMany(
-        () => LpmContentImages,
-        (lpmImage) => lpmImage.section,
-        { eager: true }
-    )
+    @OneToMany(() => LpmContentImages,
+        (lpmImage) => lpmImage.contenido,
+        { eager: true, cascade: true })
     contenido: LpmContentImages[];
 
 }

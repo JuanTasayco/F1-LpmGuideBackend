@@ -22,11 +22,11 @@ export class CreateLpmDto {
     @IsString()
     seccion: string;
 
-    @IsArray()
+    /* @IsArray()
     @ValidateNested()
     @Type(() => ContentImagesLpm)
     ingreso?: ContentImagesLpm[];
-
+ */
     @IsArray()
     @ValidateNested()
     @Type(() => ContentImagesLpm)

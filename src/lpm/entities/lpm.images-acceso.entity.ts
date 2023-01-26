@@ -4,28 +4,20 @@ import { Lpm } from "./lpm.entity";
 @Entity()
 export class LpmContentImagesIngreso {
 
-    @PrimaryGeneratedColumn('increment')
+    @PrimaryGeneratedColumn('uuid')
     id: number;
 
     @Column({ type: "text" })
     subtitles: string;
 
-    @Column({ type: "text" })
-    imagesUrl?: string;
+    @Column({ type: "text", default: "" })
+    imagesUrl: string;
 
     @ManyToOne(
         () => Lpm,
         (section) => section.ingreso,
-        { cascade: true }
+        { onDelete: 'CASCADE' }
     )
     ingreso: Lpm;
-
-    @BeforeInsert()
-    insertImagesUrl() {
-        if (!this.imagesUrl) {
-            console.log("holasas");
-            this.imagesUrl = "unknown"
-        }
-    }
 
 }

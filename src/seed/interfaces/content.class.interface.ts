@@ -4,11 +4,11 @@ import { IsOptional, IsString } from "class-validator";
 
 
 export class ContentImagesLpm {
-
     @IsString()
     subtitles: string;
 
     @IsString()
-    imagesUrl: string;
+    @IsOptional()
+    imagesUrl?: string;
 
 }

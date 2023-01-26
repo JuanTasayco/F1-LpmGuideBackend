@@ -10,25 +10,14 @@ export class LpmContentImages {
     @Column({ type: "text" })
     subtitles: string;
 
-    @Column({ type: "text" })
-    imagesUrl?: string;
+    @Column({ type: "text", default: "" })
+    imagesUrl: string;
 
     @ManyToOne(
         () => Lpm,
         (section) => section.contenido,
-        { cascade: true }
+        { onDelete: 'CASCADE' }
     )
-    section: Lpm;
-
- /*    @BeforeInsert()
-    insertImagesUrl() {
-        if (!this.imagesUrl) {
-            console.log("holasas");
-            this.imagesUrl = "unknown"
-        }
-    } */
-
-
-
+    contenido: Lpm;
 
 }
