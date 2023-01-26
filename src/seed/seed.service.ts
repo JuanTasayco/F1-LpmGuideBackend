@@ -15,7 +15,7 @@ export class SeedService {
       arraySections.push(this.lpmService.createSection(section));
     })
 
-    await Promise.all(arraySections)
+    /*    await Promise.all(arraySections) */
 
     return "seed executed";
   }

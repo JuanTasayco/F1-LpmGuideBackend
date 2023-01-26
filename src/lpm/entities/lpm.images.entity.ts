@@ -1,29 +1,34 @@
-import { Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Lpm } from "./lpm.entity";
 
 @Entity()
 export class LpmContentImages {
 
-    @PrimaryGeneratedColumn('increment')
+    @PrimaryGeneratedColumn('rowid')
     id: number;
 
-    @Column({ type: "text", default: "" })
+    @Column({ type: "text" })
     subtitles: string;
 
-     @Column({ type: "text", default: "" })
-     imagesUrl: string;
- 
+    @Column({ type: "text" })
+    imagesUrl?: string;
 
     @ManyToOne(
-        (type) => Lpm,
+        () => Lpm,
         (section) => section.contenido,
+        { cascade: true }
     )
     section: Lpm;
 
-    /*     @ManyToOne(
-            () => Lpm,
-            (section) => section.ingreso,
-        )
-        sectIn: Lpm;
-     */
+ /*    @BeforeInsert()
+    insertImagesUrl() {
+        if (!this.imagesUrl) {
+            console.log("holasas");
+            this.imagesUrl = "unknown"
+        }
+    } */
+
+
+
+
 }

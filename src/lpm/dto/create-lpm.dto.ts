@@ -22,7 +22,6 @@ export class CreateLpmDto {
     @IsString()
     seccion: string;
 
-    @IsOptional()
     @IsArray()
     @ValidateNested()
     @Type(() => ContentImagesLpm)

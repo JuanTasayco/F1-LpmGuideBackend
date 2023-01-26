@@ -5,10 +5,11 @@ import { SeedModule } from 'src/seed/seed.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Lpm } from './entities/lpm.entity';
 import { LpmContentImages } from './entities/lpm.images.entity';
+import { LpmContentImagesIngreso } from './entities';
 
 @Module({
   controllers: [LpmController],
-  imports: [TypeOrmModule.forFeature([Lpm, LpmContentImages])],
+  imports: [TypeOrmModule.forFeature([Lpm, LpmContentImages, LpmContentImagesIngreso])],
   providers: [LpmService],
   exports: [LpmService]
 })

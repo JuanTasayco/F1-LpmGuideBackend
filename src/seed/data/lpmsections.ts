@@ -6,10 +6,55 @@ export {
 
 const informacion: Secciones[] = [
     {
+        "titulo": "valores",
+        "titulo2": "valores",
+        "subtitulo": "***Solo está para realizar busquedas, esto se edita manualmente",
+        "panel": "Panel Valores",
+        "seccion": "principal",
+        "ingreso": [{
+            "subtitles": "Para registrar las faltas ir a Asistencia y Registro de faltas",
+            "imagesUrl": "assets/Asistencias/Faltas/1faltas.png"
+        }],
+        "contenido": [{
+            "subtitles": "Para registrar las faltas ir a Asistencia y Registro de faltas",
+            "imagesUrl": "assets/Asistencias/Faltas/1faltas.png"
+        }]
+    }, {
+        "titulo": "procesos",
+        "titulo2": "Procesos",
+        "subtitulo": "***Solo está para realizar busquedas, esto se edita manualmente",
+        "panel": "Panel Procesos",
+        "seccion": "principal",
+        "ingreso": [{
+            "subtitles": "Para registrar las faltas ir a Asistencia y Registro de faltas",
+            "imagesUrl": "assets/Asistencias/Faltas/1faltas.png"
+        }],
+        "contenido": [{
+            "subtitles": "Para registrar las faltas ir a Asistencia y Registro de faltas",
+            "imagesUrl": "assets/Asistencias/Faltas/1faltas.png"
+        }]
+    },
+    {
+        "titulo": "reportes",
+        "titulo2": "Reportes",
+        "subtitulo": "**Solo está para realizar busquedas, esto se edita manualmente",
+        "panel": "Panel Reportes",
+        "seccion": "principal",
+        "ingreso": [{
+            "subtitles": "Para registrar las faltas ir a Asistencia y Registro de faltas",
+            "imagesUrl": "assets/Asistencias/Faltas/1faltas.png"
+        }],
+        "contenido": [{
+            "subtitles": "Para registrar las faltas ir a Asistencia y Registro de faltas",
+            "imagesUrl": "assets/Asistencias/Faltas/1faltas.png"
+        }]
+    },
+    {
         "titulo": "faltas",
         "subtitulo": "Las faltas se agregan antes de la inserción de valores, recordar NO descontar dias de pago, solo el dato informativo del mes se reduce, ejm: Si tiene un día de falta, se le calcula en base a 30 días, no colocar 29 de lo contario se le descontará el doble",
         "panel": "Panel Faltas",
         "seccion": "asistencias",
+        "titulo2": "faltas",
         "ingreso": [{
             "subtitles": "Para registrar las faltas ir a Asistencia y Registro de faltas",
             "imagesUrl": "assets/Asistencias/Faltas/1faltas.png"
@@ -50,6 +95,7 @@ const informacion: Secciones[] = [
         "subtitulo": "Las tardanzas se agregan en la tabla de valores, van en minutos y requieren tener la jornada laboral (en la ficha) correctamente configurada",
         "panel": "Panel Tardanzas",
         "seccion": "asistencias",
+        "titulo2": "tardanzas",
         "ingreso": [{
             "subtitles": "Para agregar tardanzas ir a Procesos  y luego a valores",
             "imagesUrl": "assets/Asistencias/Tardanzas/1tardanzas.png"
@@ -84,6 +130,7 @@ const informacion: Secciones[] = [
         "subtitulo": "Las licencias y subsidios se llenan desde el mismo panel, y se colocan antes de la inserción de valores, si se hace después, no se asignarán de manera automática después",
         "panel": "Panel Licencias",
         "seccion": "asistencias",
+        "titulo2": "licencias",
         "ingreso": [{
             "subtitles": "Dirigirse a Asistencia/licencias",
             "imagesUrl": "assets/Asistencias/Licencias/1licencias.png"
@@ -131,6 +178,7 @@ const informacion: Secciones[] = [
         "subtitulo": "El llenado de vacaciones va antes de la inserción de valores, si se hace después, no se asignarán los días de manera automática después",
         "panel": "Panel Vacaciones",
         "seccion": "asistencias",
+        "titulo2": "vacaciones",
         "ingreso": [{
             "subtitles": "Para las vacaciones ir a Asistencia y luego a Vacaciones.",
             "imagesUrl": "assets/Asistencias/Vacaciones/1VACACIONES.png"
@@ -184,6 +232,7 @@ const informacion: Secciones[] = [
         "subtitulo": "En el panel CTS solo trabajar de manera semestral, hay opciones mensuales, pero no están aplicadas para este sistema.",
         "panel": "Panel CTS",
         "seccion": "especiales",
+        "titulo2": "cts",
         "ingreso": [{
             "subtitles": "Activar CTS",
             "imagesUrl": "assets/Especiales/Cts/1CTS.png"
@@ -225,10 +274,11 @@ const informacion: Secciones[] = [
     }
     ,
     {
-        "titulo": "gratificaciones",
+        "titulo": "gratificacion",
         "subtitulo": "Es necesario entender que las las gratificaciones toman cada periodo de los últimos 6 meses, estos abarcan un contenedor especificado por un número, y al lado el periodo en curso. Si uno de estos no tiene número equivalente al de sus hermanos, ese mes no será tomado en cuenta.",
         "panel": "Panel Gratificacion",
         "seccion": "especiales",
+        "titulo2": "gratificacion",
         "ingreso": [
             {
                 "subtitles": "Ir a periodos para habilitar el proceso de gratificación",
@@ -272,7 +322,7 @@ const informacion: Secciones[] = [
     }
     ,
     {
-        "titulo": "renta",
+        "titulo": "rentaExterna",
         "titulo2": "renta Externa",
         "subtitulo": "La renta aquí se calcula en base al mes declarado por primera vez y el total anual. Teniendo en cuenta que son 14 sueldos, si declaramos por primera vez en Enero, tendríamos total-anual/14, si declaramos en Febrero sería total/13, para Marzo total/12 etc, el resultado se va declarando mes a mes desde ese punto en adelante. Si estamos en Julio, el salto es de 2, es decir si en Junio es /9, para Julio será /7.",
         "panel": "Panel Renta Externa",
@@ -306,7 +356,7 @@ const informacion: Secciones[] = [
         ]
     },
     {
-        "titulo": "modtraba",
+        "titulo": "modificar",
         "titulo2": "Modificar Trabajadores",
         "subtitulo": "Recuerda que si modificas la ficha de un trabajador después de haber insertado valores, estos datos no se actualizarán automáticamente. Puedes borrar el valor y volverlo a insertar en tabla de valores siempre y cuando no hayas ingresado registros ya que se borrarán, lo recomendable es ajustar los valores manualmente.",
         "panel": "Panel Usuarios",
@@ -329,7 +379,7 @@ const informacion: Secciones[] = [
     },
 
     {
-        "titulo": "ingresatraba",
+        "titulo": "ingresarPersonal",
         "subtitulo": "Antes de ingresar algún trabajador nuevo. Verificar si ya ha formado parte de la plantilla anteriormente, recuerda que cuando un trabajador es cesado no se borra de manera permanente, solo va al contenedor de BAJAS.",
         "titulo2": "Ingresar Trabajadores",
         "panel": "Panel Usuarios",
@@ -435,6 +485,7 @@ const informacion: Secciones[] = [
     },
     {
         "titulo": "adelantos",
+        "titulo2": "Adelantos",
         "subtitulo": "El panel de adelantos para la gratificación y los datos del mes son el mismo",
         "panel": "Panel Adelantos",
         "seccion": "registros",
@@ -468,7 +519,7 @@ const informacion: Secciones[] = [
     }
     ,
     {
-        "titulo": "horext",
+        "titulo": "horasExtras",
         "titulo2": "Horas Extras",
         "subtitulo": "Para el calculo de horas extras, debe tener la jornada laboral del trabajador correctamente configurado en su ficha, y además tienen que haber valores insertados",
         "panel": "Panel HorExt",
@@ -499,7 +550,7 @@ const informacion: Secciones[] = [
     }
     ,
     {
-        "titulo": "otros_conceptos",
+        "titulo": "otrosConceptos",
         "titulo2": "Otros conceptos",
         "subtitulo": "Abarca la gran mayoría de conceptos a utilizar, no solo para los datos del mes, si no también permite agregar liquidaciones, bonificaciones relacionadas a la grati, entre otros.",
         "panel": "Panel Otros Conceptos",
@@ -538,7 +589,7 @@ const informacion: Secciones[] = [
     }
     ,
     {
-        "titulo": "otros_ingresos",
+        "titulo": "otrosIngresos",
         "titulo2": "Otros Ingresos",
         "subtitulo": "Este panel es equivalente al valor que se puede obtener en Otros conceptos I049, aunque se recomienda usar este para evitar problemas.",
         "panel": "Panel Otros Ingresos",
@@ -564,7 +615,7 @@ const informacion: Secciones[] = [
     }
     ,
     {
-        "titulo": "renta5",
+        "titulo": "reporteRenta",
         "titulo2": "Renta 5ta",
         "subtitulo": "La renta de 5ta no es un monto que vamos a modificar, esto lo hace únicamente el sistema de manera automática.Existen formas para modificarla manualmente, pero no se recomienda, por lo tanto no se enseñará.",
         "panel": "Panel Renta",
