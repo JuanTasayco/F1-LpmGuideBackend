@@ -4,7 +4,7 @@ import { Lpm } from "./lpm.entity";
 @Entity()
 export class LpmContentImages {
 
-    @PrimaryGeneratedColumn('rowid')
+    @PrimaryGeneratedColumn()
     id: number;
 
     @Column({ type: "text" })

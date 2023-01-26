@@ -23,15 +23,16 @@ export class LpmService {
         ...infoRest,
         contenido: contenido.map(content => this.lpmImageRepository.create({ subtitles: content.subtitles, imagesUrl: content.imagesUrl }))
       })
-      console.log(seccion)
-      console.log(await this.lpmRepository.save(seccion))
+
+      await this.lpmRepository.save(seccion);
+
+      return seccion
 
     } catch (error) {
       this.handlerError(error);
     }
 
   }
-
 
   async findAll() {
     const section = await this.lpmRepository.find();

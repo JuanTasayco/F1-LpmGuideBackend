@@ -4,7 +4,7 @@ import { Lpm } from "./lpm.entity";
 @Entity()
 export class LpmContentImagesIngreso {
 
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryGeneratedColumn()
     id: number;
 
     @Column({ type: "text" })
