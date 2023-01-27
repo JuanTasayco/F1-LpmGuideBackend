@@ -33,8 +33,8 @@ export class LpmController {
   }
 
   @Delete(":id")
-  deleteSection() {
-
+  deleteSection(@Param("id", ParseUUIDPipe) id: string) {
+    return this.lpmService.deleteSection(id);
   }
 
 

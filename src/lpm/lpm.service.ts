@@ -54,7 +54,6 @@ export class LpmService {
     return section;
   };
 
-
   async findManyTitles(termino: string) {
     let title!: Lpm[];
     const queryBuilder = this.lpmRepository.createQueryBuilder('prod');
@@ -63,7 +62,7 @@ export class LpmService {
     }).getMany();
     if (!title) throw new NotFoundException(`${termino} dont exist`);
     return title;
-  }
+  };
 
   async findManySections(termino: string) {
     let section!: Lpm[];
@@ -73,18 +72,22 @@ export class LpmService {
     }).getMany();
     if (!section) throw new NotFoundException(`${termino} dont exist`);
     return section;
-  }
+  };
 
   remove(id: number) {
     return `This action removes a #${id} lpm`;
-  }
+  };
 
   handlerError(error: any) {
-
     if (error.code === "23505") {
       throw new BadRequestException(error.detail)
     }
-
-    console.log(error)
   };
+
+
+  async deleteSection(id: string) {
+
+  }
+
+
 }
