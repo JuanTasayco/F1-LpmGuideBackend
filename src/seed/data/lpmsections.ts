@@ -19,7 +19,8 @@ const informacion: Secciones[] = [
             "subtitles": "Para registrar las faltas ir a Asistencia y Registro de faltas",
             "imagesUrl": "assets/Asistencias/Faltas/1faltas.png"
         }]
-    }, {
+    },
+    {
         "titulo": "procesos",
         "titulo2": "Procesos",
         "subtitulo": "***Solo está para realizar busquedas, esto se edita manualmente",

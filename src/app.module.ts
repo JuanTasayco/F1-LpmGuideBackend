@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LpmModule } from './lpm/lpm.module';
 import { SeedModule } from './seed/seed.module';
+import { AuthModule } from './auth/auth.module';
 
 
 
@@ -21,7 +22,8 @@ import { SeedModule } from './seed/seed.module';
 
     }),
     LpmModule,
-    SeedModule],
+    SeedModule,
+    AuthModule],
 })
 export class AppModule { }
 

@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseUUIDPipe } from '@nestjs/common';
 import { LpmService } from './lpm.service';
 import { CreateLpmDto } from './dto/create-lpm.dto';
+import { UpdateLpmDto } from './dto/update-lpm.dto';
 
 
 @Controller('lpm')
@@ -32,7 +33,13 @@ export class LpmController {
     return this.lpmService.findManySections(id);
   }
 
-  @Delete(":id")
+  @Patch("section/:id")
+  updateSection(@Param("id", ParseUUIDPipe) id: string, @Body() updateSection: UpdateLpmDto) {
+    return this.lpmService.updateSectionById(id, updateSection);
+  }
+
+
+  @Delete("section/:id")
   deleteSection(@Param("id", ParseUUIDPipe) id: string) {
     return this.lpmService.deleteSection(id);
   }

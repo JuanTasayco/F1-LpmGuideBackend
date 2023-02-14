@@ -10,7 +10,7 @@ export class LpmContentImagesIngreso {
     @Column({ type: "text" })
     subtitles: string;
 
-    @Column({ type: "text", default: "" })
+    @Column({ type: "text", nullable: true, default: "" })
     imagesUrl: string;
 
     @ManyToOne(
