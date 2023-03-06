@@ -22,13 +22,12 @@ import { JwtStrategy } from './strategies/jwt-strategy';
         return {
           secret: configService.get('JWT_SECRET'),
           signOptions: {
-            expiresIn: '2h'
-          }
+            expiresIn: '2h',
+          },
         };
-      }
+      },
     }),
-
   ],
-  exports: [TypeOrmModule, JwtModule, PassportModule, AuthService]
+  exports: [TypeOrmModule, JwtModule, PassportModule, AuthService],
 })
-export class AuthModule { }
+export class AuthModule {}

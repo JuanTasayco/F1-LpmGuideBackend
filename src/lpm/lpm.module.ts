@@ -4,12 +4,15 @@ import { LpmController } from './lpm.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Lpm } from './entities/lpm.entity';
 import { LpmContentImages, LpmContentImagesIngreso } from './entities';
-
+import { CloudinaryModule } from 'src/cloudinary/cloudinary.module';
 
 @Module({
   controllers: [LpmController],
-  imports: [TypeOrmModule.forFeature([Lpm, LpmContentImages, LpmContentImagesIngreso])],
+  imports: [
+    TypeOrmModule.forFeature([Lpm, LpmContentImages, LpmContentImagesIngreso]),
+    CloudinaryModule,
+  ],
   providers: [LpmService],
-  exports: [LpmService]
+  exports: [LpmService],
 })
-export class LpmModule { }
+export class LpmModule {}

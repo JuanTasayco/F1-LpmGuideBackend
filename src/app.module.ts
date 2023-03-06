@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { LpmModule } from './lpm/lpm.module';
 import { SeedModule } from './seed/seed.module';
 import { AuthModule } from './auth/auth.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 
 
@@ -23,7 +24,8 @@ import { AuthModule } from './auth/auth.module';
     }),
     LpmModule,
     SeedModule,
-    AuthModule],
+    AuthModule,
+    CloudinaryModule],
 })
 export class AppModule { }
 
