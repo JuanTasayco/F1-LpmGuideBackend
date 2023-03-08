@@ -39,14 +39,17 @@ export class LpmController {
   )
   addFilesSection(
     @UploadedFiles() files: Array<Express.Multer.File>,
+    @Body() body: any,
     @Req() request: any,
   ) {
-    if (
+    /*   if (
       request.fileValidationError === FileValidationErrors.UNSUPPORTED_FILE_TYPE
     ) {
       throw new BadRequestException(`El tipo de archivo no es permitido`);
-    }
-    return this.lpmService.createFilesSection(files);
+    } */
+    /*    return this.lpmService.createFilesSection(files); */
+    console.log(body);
+    console.log(files);
   }
 
   @Get()

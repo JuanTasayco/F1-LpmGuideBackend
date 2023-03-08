@@ -37,6 +37,13 @@ export class LpmService {
     } catch (error) {
       this.handlerError(error);
     }
+
+    /*  arraySection.map(section=> ({
+      subtitles: section.subtitles,
+      imagesUrl : 
+
+    }) )
+ */
   }
 
   async createSection(infoSection: CreateLpmDto) {
