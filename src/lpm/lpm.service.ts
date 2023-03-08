@@ -6,6 +6,8 @@ import { CreateLpmDto } from './dto/create-lpm.dto';
 import { Lpm, LpmContentImages, LpmContentImagesIngreso } from './entities';
 import { validate as validUuid } from 'uuid';
 import { UpdateLpmDto } from './dto/update-lpm.dto';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { UploadApiErrorResponse, UploadApiResponse } from 'cloudinary';
 
 @Injectable()
 export class LpmService {
@@ -16,7 +18,26 @@ export class LpmService {
     @InjectRepository(LpmContentImagesIngreso)
     private lpmIngresoRepository: Repository<LpmContentImagesIngreso>,
     private dataSource: DataSource,
+    private cloudinary: CloudinaryService,
   ) {}
+
+  arrayImagesCloud: UploadApiResponse[] | UploadApiErrorResponse[] = [];
+
+  async createFilesSection(files: Array<Express.Multer.File>) {
+    if (!files) throw new BadRequestException('No existen imagenes');
+    try {
+      for (let file of files) {
+        this.arrayImagesCloud.push(
+          (await (
+            await this.cloudinary.uploadImage(file)
+          ).secure_url) as UploadApiErrorResponse & UploadApiResponse,
+        );
+      }
+      return this.arrayImagesCloud;
+    } catch (error) {
+      this.handlerError(error);
+    }
+  }
 
   async createSection(infoSection: CreateLpmDto) {
     let { contenido = [], ...infoRest } = infoSection;
