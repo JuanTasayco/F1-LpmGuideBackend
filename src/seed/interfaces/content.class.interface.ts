@@ -1,14 +1,13 @@
 /* interfaz clase usada para validar el arreglo de objetos del DTO, especificamente para la entidad imagenesLpm */
 
-import { IsOptional, IsString } from "class-validator";
-
+import { Transform } from 'class-transformer';
+import { IsOptional, IsString } from 'class-validator';
 
 export class ContentImagesLpm {
-    @IsString()
-    subtitles: string;
+  @IsString()
+  subtitles: string;
 
-    @IsString()
-    @IsOptional()
-    imagesUrl?: string;
-
+  @IsOptional()
+  @Transform(({ value }) => value ?? undefined)
+  imagesUrl?: string;
 }

@@ -31,7 +31,7 @@ export class LpmController {
     return this.lpmService.createSection(infoSection);
   }
 
-  @Post('files')
+/*   @Post('files')
   @UseInterceptors(
     AnyFilesInterceptor({
       fileFilter: fileFilter,
@@ -42,15 +42,18 @@ export class LpmController {
     @Body() body: any,
     @Req() request: any,
   ) {
-    /*   if (
+      if (
       request.fileValidationError === FileValidationErrors.UNSUPPORTED_FILE_TYPE
     ) {
       throw new BadRequestException(`El tipo de archivo no es permitido`);
-    } */
-    /*    return this.lpmService.createFilesSection(files); */
+    }
+       return this.lpmService.createFilesSection(files);
     console.log(body);
     console.log(files);
   }
+ */
+
+
 
   @Get()
   findAll() {

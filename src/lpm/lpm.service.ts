@@ -8,6 +8,8 @@ import { validate as validUuid } from 'uuid';
 import { UpdateLpmDto } from './dto/update-lpm.dto';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { UploadApiErrorResponse, UploadApiResponse } from 'cloudinary';
+import { Content } from 'src/seed/interfaces/sections.interface';
+import { ContentImagesLpm } from 'src/seed/interfaces/content.class.interface';
 
 @Injectable()
 export class LpmService {
@@ -23,32 +25,35 @@ export class LpmService {
 
   arrayImagesCloud: UploadApiResponse[] | UploadApiErrorResponse[] = [];
 
-  async createFilesSection(files: Array<Express.Multer.File>) {
-    if (!files) throw new BadRequestException('No existen imagenes');
+  async createFilesSection(objetoImagenes: Content[] | ContentImagesLpm[]) {
     try {
-      for (let file of files) {
-        this.arrayImagesCloud.push(
-          (await (
-            await this.cloudinary.uploadImage(file)
-          ).secure_url) as UploadApiErrorResponse & UploadApiResponse,
-        );
-      }
-      return this.arrayImagesCloud;
+      /*     console.log(objetoImagenes[0].imagesUrl);
+      console.log(typeof objetoImagenes[0].imagesUrl);
+      const hola = await this.cloudinary.uploadImageBase64(
+        objetoImagenes[0].imagesUrl,
+      ); */
+      await this.cloudinary.uploadImageBase64(objetoImagenes[0].imagesUrl);
+      /*  objetoImagenes.map(async (contenido: Content) => {
+        return {
+          subtitles: contenido.subtitles,
+          imagesUrl: await this.cloudinary.uploadImageBase64(
+            contenido.imagesUrl,
+          ),
+        };
+      });
+      console.log('objetoImagenes', objetoImagenes);
+      return objetoImagenes; */
     } catch (error) {
       this.handlerError(error);
     }
-
-    /*  arraySection.map(section=> ({
-      subtitles: section.subtitles,
-      imagesUrl : 
-
-    }) )
- */
   }
 
   async createSection(infoSection: CreateLpmDto) {
-    let { contenido = [], ...infoRest } = infoSection;
-    try {
+    let { contenido = [], ingreso = [], ...infoRest } = infoSection;
+    /*     contenido = await this.createFilesSection(contenido); */
+
+    this.createFilesSection(contenido);
+    /*   try {
       const seccion = this.lpmRepository.create({
         ...infoRest,
         contenido: contenido.map((content) =>
@@ -59,12 +64,12 @@ export class LpmService {
         ),
       });
 
-      await this.lpmRepository.save(seccion);
+       await this.lpmRepository.save(seccion);
 
       return seccion;
     } catch (error) {
       this.handlerError(error);
-    }
+    } */
   }
 
   async findAll() {
