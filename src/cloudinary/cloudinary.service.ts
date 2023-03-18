@@ -25,7 +25,6 @@ export class CloudinaryService {
         if (error) return reject(error);
         resolve(result);
       });
-      console.log('file', base64Data);
       const stream = streamifier.createReadStream(
         Buffer.from(base64Data, 'base64'),
       );

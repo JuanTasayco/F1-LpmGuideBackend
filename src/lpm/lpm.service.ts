@@ -25,24 +25,19 @@ export class LpmService {
 
   arrayImagesCloud: UploadApiResponse[] | UploadApiErrorResponse[] = [];
 
-  async createFilesSection(objetoImagenes: Content[] | ContentImagesLpm[]) {
+  async createFilesSection(objetoImagenes: ContentImagesLpm[]) {
     try {
-      /*     console.log(objetoImagenes[0].imagesUrl);
-      console.log(typeof objetoImagenes[0].imagesUrl);
-      const hola = await this.cloudinary.uploadImageBase64(
-        objetoImagenes[0].imagesUrl,
-      ); */
-      await this.cloudinary.uploadImageBase64(objetoImagenes[0].imagesUrl);
-      /*  objetoImagenes.map(async (contenido: Content) => {
+      const setUrlToArray = objetoImagenes.map(async (contenido) => {
+        const { secure_url } = await this.cloudinary.uploadImageBase64(
+          contenido.imagesUrl,
+        );
         return {
           subtitles: contenido.subtitles,
-          imagesUrl: await this.cloudinary.uploadImageBase64(
-            contenido.imagesUrl,
-          ),
+          imagesUrl: secure_url,
         };
       });
-      console.log('objetoImagenes', objetoImagenes);
-      return objetoImagenes; */
+
+      return await Promise.all(setUrlToArray);
     } catch (error) {
       this.handlerError(error);
     }
@@ -50,12 +45,19 @@ export class LpmService {
 
   async createSection(infoSection: CreateLpmDto) {
     let { contenido = [], ingreso = [], ...infoRest } = infoSection;
-    /*     contenido = await this.createFilesSection(contenido); */
 
-    this.createFilesSection(contenido);
-    /*   try {
+    try {
+      contenido = await this.createFilesSection(contenido);
+      ingreso = await this.createFilesSection(ingreso);
+
       const seccion = this.lpmRepository.create({
         ...infoRest,
+        ingreso: ingreso.map((content) =>
+          this.lpmImageRepository.create({
+            subtitles: content.subtitles,
+            imagesUrl: content.imagesUrl,
+          }),
+        ),
         contenido: contenido.map((content) =>
           this.lpmImageRepository.create({
             subtitles: content.subtitles,
@@ -64,12 +66,13 @@ export class LpmService {
         ),
       });
 
-       await this.lpmRepository.save(seccion);
+      console.log(seccion);
+      /*  await this.lpmRepository.save(seccion); */
 
       return seccion;
     } catch (error) {
       this.handlerError(error);
-    } */
+    }
   }
 
   async findAll() {
