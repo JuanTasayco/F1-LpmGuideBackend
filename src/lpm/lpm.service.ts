@@ -8,7 +8,6 @@ import { validate as validUuid } from 'uuid';
 import { UpdateLpmDto } from './dto/update-lpm.dto';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { UploadApiErrorResponse, UploadApiResponse } from 'cloudinary';
-import { Content } from 'src/seed/interfaces/sections.interface';
 import { ContentImagesLpm } from 'src/seed/interfaces/content.class.interface';
 
 @Injectable()
@@ -28,6 +27,12 @@ export class LpmService {
   async createFilesSection(objetoImagenes: ContentImagesLpm[]) {
     try {
       const setUrlToArray = objetoImagenes.map(async (contenido) => {
+        if (contenido.imagesUrl.trim() === '') {
+          return {
+            subtitles: contenido.subtitles,
+            imagesUrl: '',
+          };
+        }
         const { secure_url } = await this.cloudinary.uploadImageBase64(
           contenido.imagesUrl,
         );
@@ -53,7 +58,7 @@ export class LpmService {
       const seccion = this.lpmRepository.create({
         ...infoRest,
         ingreso: ingreso.map((content) =>
-          this.lpmImageRepository.create({
+          this.lpmIngresoRepository.create({
             subtitles: content.subtitles,
             imagesUrl: content.imagesUrl,
           }),
@@ -66,11 +71,11 @@ export class LpmService {
         ),
       });
 
+      await this.lpmRepository.save(seccion);
       console.log(seccion);
-      /*  await this.lpmRepository.save(seccion); */
-
       return seccion;
     } catch (error) {
+      console.log(error);
       this.handlerError(error);
     }
   }

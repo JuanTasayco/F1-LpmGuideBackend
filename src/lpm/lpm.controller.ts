@@ -15,13 +15,6 @@ import { LpmService } from './lpm.service';
 import { CreateLpmDto } from './dto/create-lpm.dto';
 import { UpdateLpmDto } from './dto/update-lpm.dto';
 
-import { AnyFilesInterceptor } from '@nestjs/platform-express/multer';
-import {
-  fileFilter,
-  FileValidationErrors,
-} from 'src/helpers/fileFilter.helper';
-import { BadRequestException } from '@nestjs/common/exceptions';
-
 @Controller('lpm')
 export class LpmController {
   constructor(private readonly lpmService: LpmService) {}
@@ -30,30 +23,6 @@ export class LpmController {
   addSection(@Body() infoSection: CreateLpmDto) {
     return this.lpmService.createSection(infoSection);
   }
-
-/*   @Post('files')
-  @UseInterceptors(
-    AnyFilesInterceptor({
-      fileFilter: fileFilter,
-    }),
-  )
-  addFilesSection(
-    @UploadedFiles() files: Array<Express.Multer.File>,
-    @Body() body: any,
-    @Req() request: any,
-  ) {
-      if (
-      request.fileValidationError === FileValidationErrors.UNSUPPORTED_FILE_TYPE
-    ) {
-      throw new BadRequestException(`El tipo de archivo no es permitido`);
-    }
-       return this.lpmService.createFilesSection(files);
-    console.log(body);
-    console.log(files);
-  }
- */
-
-
 
   @Get()
   findAll() {

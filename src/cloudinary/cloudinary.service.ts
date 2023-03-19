@@ -31,4 +31,15 @@ export class CloudinaryService {
       stream.pipe(upload);
     });
   }
+
+  async deleteImagesCloudByError(publicsId: string[]) {
+    try {
+      publicsId.forEach(async (publicId) => {
+        const result = await v2.uploader.destroy(publicId);
+        return result;
+      });
+    } catch (error) {
+      console.log('errorDeleteImageCloudinary', error);
+    }
+  }
 }
