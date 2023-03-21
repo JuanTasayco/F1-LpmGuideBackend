@@ -19,6 +19,9 @@ export class LpmContentImagesIngreso {
   @Column({ type: 'text', nullable: true, default: '' })
   imagesUrl: string;
 
+  @Column({ type: 'text', default: '' })
+  publicIdImage?: string;
+
   @ManyToOne(() => Lpm, (section) => section.ingreso, { onDelete: 'CASCADE' })
   ingreso: Lpm;
 }

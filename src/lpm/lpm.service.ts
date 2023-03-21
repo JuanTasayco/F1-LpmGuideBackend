@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, QueryRunner, Repository } from 'typeorm';
+import { DataSource, EntityManager, QueryRunner, Repository } from 'typeorm';
 import { CreateLpmDto } from './dto/create-lpm.dto';
 import { Lpm, LpmContentImages, LpmContentImagesIngreso } from './entities';
 import { validate as validUuid } from 'uuid';
@@ -22,24 +22,33 @@ export class LpmService {
     private cloudinary: CloudinaryService,
   ) {}
 
-  arrayImagesCloud: UploadApiResponse[] | UploadApiErrorResponse[] = [];
+  imagenesEnCaliente: string[] = [];
 
-  async createFilesSection(objetoImagenes: ContentImagesLpm[]) {
+  async createFilesCloudinary(objetoImagenes: ContentImagesLpm[]) {
     try {
       const setUrlToArray = objetoImagenes.map(async (contenido) => {
-        if (contenido.imagesUrl.trim() === '') {
+        console.log(await this.cloudinary.validateBase64(contenido.imagesUrl));
+        if (!(await this.cloudinary.validateBase64(contenido.imagesUrl))) {
+          const { secure_url, public_id } =
+            await this.cloudinary.uploadImageBase64(contenido.imagesUrl);
+          console.log(
+            'ESTOY ENTRANDO A LA CONDICIONAL DE HAY IMAGENES Y USO API',
+          );
+
+          this.imagenesEnCaliente.push(public_id);
           return {
             subtitles: contenido.subtitles,
-            imagesUrl: '',
+            imagesUrl: secure_url,
+            publicIdImage: public_id,
+          };
+        } else {
+          console.log('ESTOY ENTRANDO A LA CONDICIONAL DE NO ES BASE 64');
+          return {
+            subtitles: contenido.subtitles,
+            imagesUrl: contenido.imagesUrl,
+            publicIdImage: contenido.imagesUrl,
           };
         }
-        const { secure_url } = await this.cloudinary.uploadImageBase64(
-          contenido.imagesUrl,
-        );
-        return {
-          subtitles: contenido.subtitles,
-          imagesUrl: secure_url,
-        };
       });
 
       return await Promise.all(setUrlToArray);
@@ -48,34 +57,62 @@ export class LpmService {
     }
   }
 
+  createEntityFiles(
+    array: ContentImagesLpm[],
+    repository: Repository<LpmContentImagesIngreso | LpmContentImages>,
+  ): any {
+    return array.map((content) =>
+      repository.create({
+        subtitles: content.subtitles,
+        imagesUrl: content.imagesUrl,
+        publicIdImage: content.publicIdImage,
+      }),
+    );
+  }
+
+  async deleteImagesForUpdate(
+    id: string,
+    manager: EntityManager,
+    ingreso: ContentImagesLpm[],
+    contenido: ContentImagesLpm[],
+  ) {
+    const deletePromises = [];
+
+    if (contenido) {
+      deletePromises.push(manager.delete(LpmContentImages, { contenido: id }));
+    }
+
+    if (ingreso) {
+      deletePromises.push(
+        manager.delete(LpmContentImagesIngreso, { ingreso: id }),
+      );
+    }
+
+    await Promise.all(deletePromises);
+  }
+
+  /* ======================================================== */
+  /* methos for controllers */
+
   async createSection(infoSection: CreateLpmDto) {
     let { contenido = [], ingreso = [], ...infoRest } = infoSection;
 
     try {
-      contenido = await this.createFilesSection(contenido);
-      ingreso = await this.createFilesSection(ingreso);
+      contenido = await this.createFilesCloudinary(contenido);
+      ingreso = await this.createFilesCloudinary(ingreso);
 
       const seccion = this.lpmRepository.create({
         ...infoRest,
-        ingreso: ingreso.map((content) =>
-          this.lpmIngresoRepository.create({
-            subtitles: content.subtitles,
-            imagesUrl: content.imagesUrl,
-          }),
-        ),
-        contenido: contenido.map((content) =>
-          this.lpmImageRepository.create({
-            subtitles: content.subtitles,
-            imagesUrl: content.imagesUrl,
-          }),
-        ),
+        ingreso: this.createEntityFiles(ingreso, this.lpmIngresoRepository),
+        contenido: this.createEntityFiles(contenido, this.lpmImageRepository),
       });
 
       await this.lpmRepository.save(seccion);
-      console.log(seccion);
+
       return seccion;
     } catch (error) {
-      console.log(error);
+      this.cloudinary.deleteImagesCloudByError(this.imagenesEnCaliente);
+      this.imagenesEnCaliente = [];
       this.handlerError(error);
     }
   }
@@ -124,54 +161,53 @@ export class LpmService {
     return section;
   }
 
+  getIdClouds(items: ContentImagesLpm[]) {
+    return items?.map((item) => item.publicIdImage).filter(Boolean) || [];
+  }
+
   async updateSectionById(id: string, updateDto: UpdateLpmDto) {
-    const { ingreso, contenido, ...updateInfo } = updateDto;
+    let { ingreso, contenido, ...updateInfo } = updateDto;
+
     const section = await this.lpmRepository.preload({ id, ...updateInfo });
     if (!section) throw new NotFoundException(`id ${id} dont exist`);
+
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
     try {
-      if (ingreso && contenido) {
-        await queryRunner.manager.delete(LpmContentImages, { contenido: id });
-        await queryRunner.manager.delete(LpmContentImagesIngreso, {
-          ingreso: id,
-        });
-        section.contenido = contenido.map((contenido) =>
-          this.lpmImageRepository.create({
-            subtitles: contenido.subtitles,
-            imagesUrl: contenido.imagesUrl,
-          }),
+      if (contenido || ingreso) {
+        await this.deleteImagesForUpdate(
+          id,
+          queryRunner.manager,
+          ingreso,
+          contenido,
         );
-        section.ingreso = ingreso.map((ingreso) =>
-          this.lpmIngresoRepository.create({
-            subtitles: ingreso.subtitles,
-            imagesUrl: ingreso.imagesUrl,
-          }),
+      }
+
+      if (contenido) {
+        console.log('contenido0', contenido);
+        contenido = await this.createFilesCloudinary(contenido);
+        /*  console.log('contenido1', contenido); */
+        section.contenido = this.createEntityFiles(
+          contenido,
+          this.lpmImageRepository,
         );
-      } else if (contenido) {
-        await queryRunner.manager.delete(LpmContentImages, { contenido: id });
-        section.contenido = contenido.map((contenido) =>
-          this.lpmImageRepository.create({
-            subtitles: contenido.subtitles,
-            imagesUrl: contenido.imagesUrl,
-          }),
-        );
-      } else if (ingreso) {
-        await queryRunner.manager.delete(LpmContentImagesIngreso, {
-          ingreso: id,
-        });
-        section.ingreso = ingreso.map((ingreso) =>
-          this.lpmIngresoRepository.create({
-            subtitles: ingreso.subtitles,
-            imagesUrl: ingreso.imagesUrl,
-          }),
+      }
+
+      if (ingreso) {
+        ingreso = await this.createFilesCloudinary(ingreso);
+        console.log('ingreso', ingreso);
+        section.ingreso = this.createEntityFiles(
+          ingreso,
+          this.lpmIngresoRepository,
         );
       }
 
       await queryRunner.manager.save(section);
+      console.log('new section', section);
       await queryRunner.commitTransaction();
+
       return section;
     } catch (error) {
       await queryRunner.rollbackTransaction();

@@ -32,14 +32,35 @@ export class CloudinaryService {
     });
   }
 
-  async deleteImagesCloudByError(publicsId: string[]) {
+  async validateBase64(archivoBase64: string) {
     try {
-      publicsId.forEach(async (publicId) => {
+      const buffer = Uint8Array.from(atob(archivoBase64), (c) =>
+        c.charCodeAt(0),
+      ).buffer;
+
+      const encodeStr = btoa(String.fromCharCode(...new Uint8Array(buffer)));
+
+      return encodeStr === archivoBase64;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  async deleteImagesCloudByError(publicsId: string[]) {
+    const promesas = publicsId.map(async (publicId) => {
+      try {
         const result = await v2.uploader.destroy(publicId);
         return result;
-      });
+      } catch (error) {
+        console.log('Error al borrar imagen desde cloudinary');
+        throw error;
+      }
+    });
+
+    try {
+      await Promise.all(promesas);
     } catch (error) {
-      console.log('errorDeleteImageCloudinary', error);
+      console.log('Error al eliminar imagenes');
     }
   }
 }

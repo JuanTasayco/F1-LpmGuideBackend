@@ -10,4 +10,8 @@ export class ContentImagesLpm {
   @IsOptional()
   @Transform(({ value }) => value ?? undefined)
   imagesUrl?: string;
+
+  @IsOptional()
+  @IsString()
+  publicIdImage?: string;
 }

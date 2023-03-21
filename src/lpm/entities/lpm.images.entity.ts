@@ -19,6 +19,9 @@ export class LpmContentImages {
   @Column({ type: 'text', nullable: true, default: '' })
   imagesUrl: string;
 
+  @Column({ type: 'text', default: '' })
+  publicIdImage?: string;
+
   @ManyToOne(() => Lpm, (section) => section.contenido, { onDelete: 'CASCADE' })
   contenido: Lpm;
 }
