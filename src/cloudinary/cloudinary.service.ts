@@ -23,6 +23,7 @@ export class CloudinaryService {
     return new Promise((resolve, reject) => {
       const upload = v2.uploader.upload_stream((error, result) => {
         if (error) return reject(error);
+
         resolve(result);
       });
       const stream = streamifier.createReadStream(
@@ -33,16 +34,10 @@ export class CloudinaryService {
   }
 
   async validateBase64(archivoBase64: string) {
-    try {
-      const buffer = Uint8Array.from(atob(archivoBase64), (c) =>
-        c.charCodeAt(0),
-      ).buffer;
-
-      const encodeStr = btoa(String.fromCharCode(...new Uint8Array(buffer)));
-
-      return encodeStr === archivoBase64;
-    } catch (error) {
+    if (!/^data:image\/\w+;base64,/.test(archivoBase64)) {
       return false;
+    } else {
+      return true;
     }
   }
 

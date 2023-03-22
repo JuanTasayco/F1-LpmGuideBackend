@@ -27,13 +27,9 @@ export class LpmService {
   async createFilesCloudinary(objetoImagenes: ContentImagesLpm[]) {
     try {
       const setUrlToArray = objetoImagenes.map(async (contenido) => {
-        console.log(await this.cloudinary.validateBase64(contenido.imagesUrl));
-        if (!(await this.cloudinary.validateBase64(contenido.imagesUrl))) {
+        if (await this.cloudinary.validateBase64(contenido.imagesUrl)) {
           const { secure_url, public_id } =
             await this.cloudinary.uploadImageBase64(contenido.imagesUrl);
-          console.log(
-            'ESTOY ENTRANDO A LA CONDICIONAL DE HAY IMAGENES Y USO API',
-          );
 
           this.imagenesEnCaliente.push(public_id);
           return {
@@ -42,11 +38,10 @@ export class LpmService {
             publicIdImage: public_id,
           };
         } else {
-          console.log('ESTOY ENTRANDO A LA CONDICIONAL DE NO ES BASE 64');
           return {
             subtitles: contenido.subtitles,
             imagesUrl: contenido.imagesUrl,
-            publicIdImage: contenido.imagesUrl,
+            publicIdImage: contenido.publicIdImage,
           };
         }
       });
@@ -77,16 +72,24 @@ export class LpmService {
     contenido: ContentImagesLpm[],
   ) {
     const deletePromises = [];
-
+    const deletePublicsId = [];
     if (contenido) {
       deletePromises.push(manager.delete(LpmContentImages, { contenido: id }));
+      contenido.forEach((content) => {
+        deletePublicsId.push(content.publicIdImage);
+      });
     }
 
     if (ingreso) {
       deletePromises.push(
         manager.delete(LpmContentImagesIngreso, { ingreso: id }),
       );
+
+      ingreso.forEach((content) => {
+        deletePublicsId.push(content.publicIdImage);
+      });
     }
+    this.cloudinary.deleteImagesCloudByError(deletePublicsId);
 
     await Promise.all(deletePromises);
   }
@@ -186,9 +189,7 @@ export class LpmService {
       }
 
       if (contenido) {
-        console.log('contenido0', contenido);
         contenido = await this.createFilesCloudinary(contenido);
-        /*  console.log('contenido1', contenido); */
         section.contenido = this.createEntityFiles(
           contenido,
           this.lpmImageRepository,
@@ -197,7 +198,6 @@ export class LpmService {
 
       if (ingreso) {
         ingreso = await this.createFilesCloudinary(ingreso);
-        console.log('ingreso', ingreso);
         section.ingreso = this.createEntityFiles(
           ingreso,
           this.lpmIngresoRepository,
@@ -205,7 +205,6 @@ export class LpmService {
       }
 
       await queryRunner.manager.save(section);
-      console.log('new section', section);
       await queryRunner.commitTransaction();
 
       return section;
@@ -229,7 +228,6 @@ export class LpmService {
     if (error.code === '23505') {
       throw new BadRequestException(error.detail);
     }
-    console.log(error);
     return error;
   }
 }
