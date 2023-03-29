@@ -1,39 +1,15 @@
 import {
   IsEmail,
-  IsIn,
-  IsOptional,
   IsString,
   Matches,
   MaxLength,
   MinLength,
 } from 'class-validator';
 
-export class CreateAuthDto {
-  @IsString()
-  @MinLength(1)
-  name: string;
-
-  @IsString()
-  apellido: string;
-
+export class LoginAuthDto {
   @IsString()
   @IsEmail()
   email: string;
-
-  @IsIn(['user', 'admin'], { message: 'El rol debe ser user o admin' })
-  roles: string;
-
-  @IsString()
-  @IsOptional()
-  direccion?: string;
-
-  @IsString()
-  @IsOptional()
-  pais?: string;
-
-  @IsString()
-  @IsOptional()
-  ciudad?: string;
 
   @IsString()
   @MinLength(3)

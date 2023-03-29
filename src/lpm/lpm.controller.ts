@@ -7,9 +7,6 @@ import {
   Param,
   Delete,
   ParseUUIDPipe,
-  UseInterceptors,
-  UploadedFiles,
-  Req,
 } from '@nestjs/common';
 import { LpmService } from './lpm.service';
 import { CreateLpmDto } from './dto/create-lpm.dto';

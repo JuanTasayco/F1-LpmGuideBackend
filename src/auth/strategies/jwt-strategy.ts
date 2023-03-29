@@ -6,7 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { User } from '../entities/auth.entity';
 import { JwtPayload } from '../interfaces/jwt-payload';
 
@@ -22,19 +22,21 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   async validate(payload: JwtPayload) {
-    const { email, user, id } = payload;
+    const { email, id } = payload;
     const queryBuilder = this.userRepository.createQueryBuilder();
-    const userActive = await queryBuilder
-      .where(`id=:id or email=:email or user=:user `, {
+    const user = await queryBuilder
+      .where(`id=:id or email=:email`, {
         id,
         email,
-        user,
       })
       .getOne();
 
-    if (!userActive) throw new UnauthorizedException(`Token not valid`);
-    if (!userActive.isActive)
-      throw new BadRequestException(`User is inactive, pls comunicate `);
-    return userActive;
+    if (!user) throw new UnauthorizedException(`Token not valid`);
+
+    if (!user.isActive)
+      throw new BadRequestException(
+        `User is inactive, pls comunicate with admins `,
+      );
+    return user;
   }
 }

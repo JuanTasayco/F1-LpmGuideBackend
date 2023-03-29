@@ -28,6 +28,7 @@ export class LpmService {
     try {
       const setUrlToArray = objetoImagenes.map(async (contenido) => {
         if (await this.cloudinary.validateBase64(contenido.imagesUrl)) {
+          /* si la validación base 64 es true */
           const { secure_url, public_id } =
             await this.cloudinary.uploadImageBase64(contenido.imagesUrl);
 
@@ -36,6 +37,19 @@ export class LpmService {
             subtitles: contenido.subtitles,
             imagesUrl: secure_url,
             publicIdImage: public_id,
+          };
+        } else if (
+          contenido.imagesUrl.trim() == '' ||
+          !(await this.cloudinary.validateResourceCloudinary(
+            contenido.imagesUrl,
+          ))
+        ) {
+          /* imagen Unknown pordefecto, si se borra en cloudinary solo indicar el nuevo url y el publicImg */
+          return {
+            subtitles: contenido.subtitles,
+            imagesUrl:
+              'https://res.cloudinary.com/dndimul42/image/upload/v1679473804/jgfjex6anwpmdaxa1vd2.jpg',
+            publicIdImage: 'jgfjex6anwpmdaxa1vd2',
           };
         } else {
           return {
@@ -74,22 +88,21 @@ export class LpmService {
     const deletePromises = [];
     const deletePublicsId = [];
     if (contenido) {
-      deletePromises.push(manager.delete(LpmContentImages, { contenido: id }));
       contenido.forEach((content) => {
         deletePublicsId.push(content.publicIdImage);
       });
+      deletePromises.push(manager.delete(LpmContentImages, { contenido: id }));
     }
 
     if (ingreso) {
-      deletePromises.push(
-        manager.delete(LpmContentImagesIngreso, { ingreso: id }),
-      );
-
       ingreso.forEach((content) => {
         deletePublicsId.push(content.publicIdImage);
       });
+      deletePromises.push(
+        manager.delete(LpmContentImagesIngreso, { ingreso: id }),
+      );
     }
-    this.cloudinary.deleteImagesCloudByError(deletePublicsId);
+    await this.cloudinary.deleteImagesCloudByError(deletePublicsId);
 
     await Promise.all(deletePromises);
   }
@@ -111,11 +124,12 @@ export class LpmService {
       });
 
       await this.lpmRepository.save(seccion);
-
+      this.imagenesEnCaliente = [];
       return seccion;
     } catch (error) {
       this.cloudinary.deleteImagesCloudByError(this.imagenesEnCaliente);
       this.imagenesEnCaliente = [];
+      console.log(error);
       this.handlerError(error);
     }
   }
@@ -218,6 +232,13 @@ export class LpmService {
 
   async deleteSection(id: string) {
     const section = await this.findOne(id);
+    let { contenido, ingreso } = section;
+
+    const idsContenido = contenido.map((content) => content.publicIdImage);
+    const idsIngreso = ingreso.map((content) => content.publicIdImage);
+
+    await this.cloudinary.deleteImagesCloudByError(idsContenido);
+    await this.cloudinary.deleteImagesCloudByError(idsIngreso);
     await this.lpmRepository.remove(section);
     if (!section) throw new NotFoundException(`id ${id} dont exist`);
     return section;
@@ -226,8 +247,11 @@ export class LpmService {
   /* method for errors */
   handlerError(error: any) {
     if (error.code === '23505') {
-      throw new BadRequestException(error.detail);
+      throw new BadRequestException(
+        'El título especificado ya existe, por favor verificalo',
+      );
     }
+    console.log(error);
     return error;
   }
 }

@@ -11,6 +11,7 @@ import { CreateAuthDto } from './dto/create-auth.dto';
 import { User } from './entities/auth.entity';
 import * as bcrypt from 'bcrypt';
 import { JwtPayload } from './interfaces/jwt-payload';
+import { LoginAuthDto } from './dto/login-auto.dto';
 
 @Injectable()
 export class AuthService {
@@ -43,7 +44,7 @@ export class AuthService {
     return token;
   }
 
-  async login(bodyLoginDto: CreateAuthDto) {
+  async login(bodyLoginDto: LoginAuthDto) {
     const { password, email } = bodyLoginDto;
     try {
       const user = await this.userRepository.findOne({

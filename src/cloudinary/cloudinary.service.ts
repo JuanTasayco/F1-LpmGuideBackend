@@ -41,6 +41,17 @@ export class CloudinaryService {
     }
   }
 
+  async validateResourceCloudinary(publicId: string) {
+    try {
+      await v2.api.resource(publicId);
+      console.log('recurso Valido');
+      return true;
+    } catch (error) {
+      console.log('recurso no válido');
+      return false;
+    }
+  }
+
   async deleteImagesCloudByError(publicsId: string[]) {
     const promesas = publicsId.map(async (publicId) => {
       try {
@@ -51,7 +62,6 @@ export class CloudinaryService {
         throw error;
       }
     });
-
     try {
       await Promise.all(promesas);
     } catch (error) {
