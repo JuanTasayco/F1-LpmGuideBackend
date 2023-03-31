@@ -1,12 +1,17 @@
-import { createParamDecorator, ExecutionContext, InternalServerErrorException } from "@nestjs/common";
+import {
+  BadRequestException,
+  createParamDecorator,
+  ExecutionContext,
+} from '@nestjs/common';
 
+export const User = createParamDecorator(
+  (data: string, ctx: ExecutionContext) => {
+    const request = ctx.switchToHttp().getRequest();
+    const user = request.user;
 
-
-export const GetUser = createParamDecorator((data: string, ctx: ExecutionContext) => {
-
-    const req = ctx.switchToHttp().getRequest(); /* get request  */
-    const user = req.user; /* get request and filter user */
-    if (!user) throw new InternalServerErrorException('User not found')
-    return (!data) ? user : user[data]
-
-})
+    /* si el decorador no tiene @User('nombre') entonces devuelvo user, delo contrario por ejemplo user['nombre'] */
+    if (!user) throw new BadRequestException('User dont found ');
+  
+    return !data ? user : user[data];
+  },
+);

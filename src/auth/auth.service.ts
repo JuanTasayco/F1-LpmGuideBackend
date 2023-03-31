@@ -12,6 +12,7 @@ import { User } from './entities/auth.entity';
 import * as bcrypt from 'bcrypt';
 import { JwtPayload } from './interfaces/jwt-payload';
 import { LoginAuthDto } from './dto/login-auto.dto';
+import { UpdateAuthDto } from './dto/update-auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -70,12 +71,23 @@ export class AuthService {
 
   async findAll() {
     const users = await this.userRepository.find();
-    console.log(users);
-    return `This action returns all auth`;
+    return users;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
+  async findOne(id: string) {
+    const user = await this.userRepository.findOneBy({ id });
+    if (!user) throw new BadRequestException(`${id} dont exist`);
+    return user;
+  }
+  async updateUserByID(id: string, body: UpdateAuthDto) {
+    const user = await this.userRepository.preload({ id, ...body });
+    if (!user) throw new NotFoundException(`id:${id} dont exist`);
+    const { password, ...rest } = user;
+    await this.userRepository.save({
+      ...rest,
+      password: bcrypt.hashSync(password, 10),
+    });
+    return user;
   }
 
   errors(error: any) {

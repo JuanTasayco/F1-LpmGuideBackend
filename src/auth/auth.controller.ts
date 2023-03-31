@@ -1,13 +1,22 @@
-import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  UseGuards,
+  Param,
+  ParseUUIDPipe,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
-import { GetRawHeaders } from './decorators/get-raw-headers.decorator';
-import { GetUser } from './decorators/get-user.decorator';
-import { RoleProtected } from './decorators/role-protected.decorator';
+import { Auth } from './decorators/auth-validate.decorator';
+import { User } from './decorators/get-user.decorator';
+import { MetaDatos } from './decorators/meta-datos.decorator';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { LoginAuthDto } from './dto/login-auto.dto';
-import { User } from './entities/auth.entity';
-import { UserRoleGuard } from './guards/user-role/user-role.guard';
+import { UpdateAuthDto } from './dto/update-auth.dto';
+import { User as UserEntity } from './entities/auth.entity';
+import { RoleProtectedGuard } from './guards/role-protected/role-protected.guard';
 import { ValidRoles } from './interfaces/valid-roles';
 
 @Controller('auth')
@@ -24,34 +33,26 @@ export class AuthController {
     return this.authService.login(bodyLoginDto);
   }
 
-  @Get()
+  @Get('all')
   findAll() {
     return this.authService.findAll();
   }
 
-  @Get('private')
-  @UseGuards(AuthGuard())
-  privateRoute(
-    @GetUser() user: User,
-    @GetUser('email') userEmail: string,
-    @GetRawHeaders() rawHeaders: string[],
-  ) {
-    return {
-      ok: true,
-      msg: 'Estamos en una sala privada',
-      userEmail,
-      user: user,
-      raw: rawHeaders,
-    };
+  @Get('user/:id')
+  findById(@Param('id', ParseUUIDPipe) id: string) {
+    return this.authService.findOne(id);
   }
 
-  @Get('private2')
-  /* @SetMetadata('roles', ['admin', 'super-user']) */
-  @RoleProtected(ValidRoles.user)
-  @UseGuards(AuthGuard(), UserRoleGuard)
-  rolesRoute(@GetUser() user: User) {
+  @Post('updateUser/:id')
+  updateUserById(@Param('id') id: string, @Body() body: UpdateAuthDto) {
+    return this.authService.updateUserByID(id, body);
+  }
+
+  @Get('private')
+  @Auth(ValidRoles.admin)
+  privateRoute(@User() user: UserEntity) {
     return {
-      hola: 'hola',
+      ok: true,
       user,
     };
   }

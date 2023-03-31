@@ -11,9 +11,9 @@ export class SeedService {
 
     const arraySections: any = [];
 
-    informacion.forEach(section => {
+   /*  informacion.forEach(section => {
       arraySections.push(this.lpmService.createSection(section));
-    })
+    }) */
 
     /*    await Promise.all(arraySections) */
 
