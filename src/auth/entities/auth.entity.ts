@@ -27,6 +27,9 @@ export class User {
   @Column({ type: 'text', default: 'user' })
   roles: string;
 
+  @Column({ type: 'text', default: '' })
+  imagenUrl: string;
+
   @Column({ type: 'text', nullable: false })
   password: string;
 

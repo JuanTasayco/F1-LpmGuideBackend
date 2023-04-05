@@ -36,9 +36,13 @@ export class CreateAuthDto {
   ciudad?: string;
 
   @IsString()
+  @IsOptional()
+  imagenUrl?: string;
+
+  @IsString()
   @MinLength(3)
   @MaxLength(30)
-/*   @Matches(/(?:(?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+  /*   @Matches(/(?:(?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
     message:
       'The password must have a Uppercase, lowercase letter and a number',
   }) */

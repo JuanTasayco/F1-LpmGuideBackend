@@ -31,11 +31,12 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       })
       .getOne();
 
-    if (!user) throw new UnauthorizedException(`Token not valid`);
+    if (!user)
+      throw new UnauthorizedException(`Token no valido, acceso no autorizado`);
 
     if (!user.isActive)
       throw new BadRequestException(
-        `User is inactive, pls comunicate with admins `,
+        `El usuario está inactivo, comunicate con un administrador `,
       );
     return user;
   }

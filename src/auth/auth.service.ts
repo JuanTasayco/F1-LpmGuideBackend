@@ -13,6 +13,7 @@ import * as bcrypt from 'bcrypt';
 import { JwtPayload } from './interfaces/jwt-payload';
 import { LoginAuthDto } from './dto/login-auto.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
+import { User as UserEntity } from './entities/auth.entity';
 
 @Injectable()
 export class AuthService {
@@ -53,12 +54,13 @@ export class AuthService {
         select: { password: true, email: true, id: true },
       });
 
-      if (!user) throw new BadRequestException(`Email ${email} dont exist`);
+      if (!user)
+        throw new BadRequestException(`Email ${email} , no está registrado`);
 
       /* comparación de contraseñas */
 
       if (!bcrypt.compareSync(password, user.password))
-        throw new BadRequestException(`Password ${password} dont exist`);
+        throw new BadRequestException(`El Password es incorrecto`);
 
       return {
         ...user,
