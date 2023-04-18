@@ -55,8 +55,11 @@ export class CloudinaryService {
   async deleteImagesCloudByError(publicsId: string[]) {
     const promesas = publicsId.map(async (publicId) => {
       try {
-        const result = await v2.uploader.destroy(publicId);
-        return result;
+        if (publicId !== 'xz5trjdzo0pobxnibl7z') {
+          console.log('entrando a public id');
+          const result = await v2.uploader.destroy(publicId);
+          return result;
+        }
       } catch (error) {
         console.log('Error al borrar imagen desde cloudinary');
         throw error;

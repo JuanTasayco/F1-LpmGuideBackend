@@ -48,8 +48,8 @@ export class LpmService {
           return {
             subtitles: contenido.subtitles,
             imagesUrl:
-              'https://res.cloudinary.com/dndimul42/image/upload/v1679473804/jgfjex6anwpmdaxa1vd2.jpg',
-            publicIdImage: 'jgfjex6anwpmdaxa1vd2',
+              'https://res.cloudinary.com/dndimul42/image/upload/v1681839890/xz5trjdzo0pobxnibl7z.jpg',
+            publicIdImage: 'xz5trjdzo0pobxnibl7z',
           };
         } else {
           return {
@@ -102,6 +102,8 @@ export class LpmService {
         manager.delete(LpmContentImagesIngreso, { ingreso: id }),
       );
     }
+
+    /* envío el arreglo de publicsId a borrar */
     await this.cloudinary.deleteImagesCloudByError(deletePublicsId);
 
     await Promise.all(deletePromises);
