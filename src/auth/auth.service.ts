@@ -92,6 +92,16 @@ export class AuthService {
     return user;
   }
 
+  async deleteUser(id: string) {
+    const user = await this.findOne(id);
+    try {
+      this.userRepository.remove(user);
+      return true;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   errors(error: any) {
     if (error.code == '23505') {
       throw new NotFoundException(`${error.detail}`);

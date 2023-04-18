@@ -26,6 +26,10 @@ export class RoleProtectedGuard implements CanActivate {
     /* en user.roles obtengo los roles del usuario que viene y los comparo con los roles de arriba */
     if (!user) throw new BadRequestException('Usuario no encontrado');
     if (!roles) return true;
-    if (roles.includes(user.roles)) return true;
+    if (roles.includes(user.roles)) {
+      return true;
+    } else {
+      throw new BadRequestException('El usuario no es administrador');
+    }
   }
 }

@@ -6,6 +6,7 @@ import {
   UseGuards,
   Param,
   ParseUUIDPipe,
+  Delete,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Auth } from './decorators/auth-validate.decorator';
@@ -32,6 +33,11 @@ export class AuthController {
     return this.authService.login(bodyLoginDto);
   }
 
+  @Delete('delete/:id')
+  deleteUserById(@Param('id', ParseUUIDPipe) id: string) {
+    return this.authService.deleteUser(id);
+  }
+
   @Get('all')
   findAll() {
     return this.authService.findAll();
@@ -56,7 +62,7 @@ export class AuthController {
     };
   }
   /*  */
-  @Post('verify')
+  @Get('verify')
   @Auth(ValidRoles.admin)
   verifyToken(@User() user: UserEntity) {
     return user;
