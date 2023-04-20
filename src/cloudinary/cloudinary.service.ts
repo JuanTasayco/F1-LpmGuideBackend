@@ -44,19 +44,17 @@ export class CloudinaryService {
   async validateResourceCloudinary(publicId: string) {
     try {
       await v2.api.resource(publicId);
-      console.log('recurso Valido');
       return true;
     } catch (error) {
-      console.log('recurso no válido');
+      console.log('recurso no válido', publicId);
       return false;
     }
   }
 
-  async deleteImagesCloudByError(publicsId: string[]) {
+  async deleteImagesCloud(publicsId: string[]) {
     const promesas = publicsId.map(async (publicId) => {
       try {
-        if (publicId !== 'xz5trjdzo0pobxnibl7z') {
-          console.log('entrando a public id');
+        if (publicId !== 'b9janghwwhy6agr5nj9x') {
           const result = await v2.uploader.destroy(publicId);
           return result;
         }

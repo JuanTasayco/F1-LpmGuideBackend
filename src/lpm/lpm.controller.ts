@@ -53,4 +53,10 @@ export class LpmController {
   deleteSection(@Param('id', ParseUUIDPipe) id: string) {
     return this.lpmService.deleteSection(id);
   }
+
+  /* this methos is used for eliminated independent images in blocks (subtitles and imagesUrl) */
+  @Post('delete/cloudimage')
+  deleteCloudinaryImages(@Body() publicIds: string[]) {
+    return this.lpmService.deleteCloudinaryImages(publicIds);
+  }
 }

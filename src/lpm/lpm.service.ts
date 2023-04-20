@@ -28,10 +28,10 @@ export class LpmService {
     try {
       const setUrlToArray = objetoImagenes.map(async (contenido) => {
         if (await this.cloudinary.validateBase64(contenido.imagesUrl)) {
+          /* create */
           /* si la validación base 64 es true */
           const { secure_url, public_id } =
             await this.cloudinary.uploadImageBase64(contenido.imagesUrl);
-
           this.imagenesEnCaliente.push(public_id);
           return {
             subtitles: contenido.subtitles,
@@ -41,15 +41,15 @@ export class LpmService {
         } else if (
           contenido.imagesUrl.trim() == '' ||
           !(await this.cloudinary.validateResourceCloudinary(
-            contenido.imagesUrl,
+            contenido.publicIdImage,
           ))
         ) {
           /* imagen Unknown pordefecto, si se borra en cloudinary solo indicar el nuevo url y el publicImg */
           return {
             subtitles: contenido.subtitles,
             imagesUrl:
-              'https://res.cloudinary.com/dndimul42/image/upload/v1681839890/xz5trjdzo0pobxnibl7z.jpg',
-            publicIdImage: 'xz5trjdzo0pobxnibl7z',
+              'https://res.cloudinary.com/dndimul42/image/upload/v1681839890/lpm/b9janghwwhy6agr5nj9x.jpg',
+            publicIdImage: 'b9janghwwhy6agr5nj9x',
           };
         } else {
           return {
@@ -79,36 +79,6 @@ export class LpmService {
     );
   }
 
-  async deleteImagesForUpdate(
-    id: string,
-    manager: EntityManager,
-    ingreso: ContentImagesLpm[],
-    contenido: ContentImagesLpm[],
-  ) {
-    const deletePromises = [];
-    const deletePublicsId = [];
-    if (contenido) {
-      contenido.forEach((content) => {
-        deletePublicsId.push(content.publicIdImage);
-      });
-      deletePromises.push(manager.delete(LpmContentImages, { contenido: id }));
-    }
-
-    if (ingreso) {
-      ingreso.forEach((content) => {
-        deletePublicsId.push(content.publicIdImage);
-      });
-      deletePromises.push(
-        manager.delete(LpmContentImagesIngreso, { ingreso: id }),
-      );
-    }
-
-    /* envío el arreglo de publicsId a borrar */
-    await this.cloudinary.deleteImagesCloudByError(deletePublicsId);
-
-    await Promise.all(deletePromises);
-  }
-
   /* ======================================================== */
   /* methos for controllers */
 
@@ -129,7 +99,7 @@ export class LpmService {
       this.imagenesEnCaliente = [];
       return seccion;
     } catch (error) {
-      this.cloudinary.deleteImagesCloudByError(this.imagenesEnCaliente);
+      this.cloudinary.deleteImagesCloud(this.imagenesEnCaliente);
       this.imagenesEnCaliente = [];
       console.log(error);
       this.handlerError(error);
@@ -195,15 +165,6 @@ export class LpmService {
     await queryRunner.startTransaction();
 
     try {
-      if (contenido || ingreso) {
-        await this.deleteImagesForUpdate(
-          id,
-          queryRunner.manager,
-          ingreso,
-          contenido,
-        );
-      }
-
       if (contenido) {
         contenido = await this.createFilesCloudinary(contenido);
         section.contenido = this.createEntityFiles(
@@ -239,11 +200,19 @@ export class LpmService {
     const idsContenido = contenido.map((content) => content.publicIdImage);
     const idsIngreso = ingreso.map((content) => content.publicIdImage);
 
-    await this.cloudinary.deleteImagesCloudByError(idsContenido);
-    await this.cloudinary.deleteImagesCloudByError(idsIngreso);
+    await this.cloudinary.deleteImagesCloud(idsContenido);
+    await this.cloudinary.deleteImagesCloud(idsIngreso);
     await this.lpmRepository.remove(section);
     if (!section) throw new NotFoundException(`id ${id} dont exist`);
     return section;
+  }
+
+  async deleteCloudinaryImages(images: string[]) {
+    await this.cloudinary.deleteImagesCloud(images);
+    return {
+      value: 'ok',
+      msg: 'imagenes destruidas',
+    };
   }
 
   /* method for errors */
