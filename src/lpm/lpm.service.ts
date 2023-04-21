@@ -166,6 +166,7 @@ export class LpmService {
 
     try {
       if (contenido) {
+        await queryRunner.manager.delete(LpmContentImages, { contenido: id });
         contenido = await this.createFilesCloudinary(contenido);
         section.contenido = this.createEntityFiles(
           contenido,
@@ -174,6 +175,9 @@ export class LpmService {
       }
 
       if (ingreso) {
+        await queryRunner.manager.delete(LpmContentImagesIngreso, {
+          ingreso: id,
+        });
         ingreso = await this.createFilesCloudinary(ingreso);
         section.ingreso = this.createEntityFiles(
           ingreso,
