@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  lpmapp:
+    depends_on:
+      - db
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    image: lpmimage-docker
+    container_name: lpmapp
+    restart: always # reiniciar el contenedor si se detiene
+    ports:
+      - "${PORT}:${PORT}"
+    # working_dir: /var/www/pokedex
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    # volumes:
+    #   - ./:/var/www/pokedex
+
+  db:
+    image: postgres:14.3
+    container_name: lpmpostgres
+    restart: always
+    ports:
+      - 5434:5434
+    environment:
+      MONGODB_DATABASE: nest-pokemon
+    # volumes:
+    #   - ./mongo:/data/db

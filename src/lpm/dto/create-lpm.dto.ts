@@ -1,8 +1,9 @@
 import { Type } from 'class-transformer';
 import { IsArray, IsString, IsOptional, ValidateNested } from 'class-validator';
 import { ContentImagesLpm } from 'src/seed/interfaces/content.class.interface';
-
+/* netoSpirit  */
 export class CreateLpmDto {
+
   @IsString()
   titulo: string;
 
@@ -29,4 +30,5 @@ export class CreateLpmDto {
   @ValidateNested()
   @Type(() => ContentImagesLpm)
   contenido: ContentImagesLpm[];
+
 }
