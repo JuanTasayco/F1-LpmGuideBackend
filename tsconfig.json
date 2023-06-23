@@ -1,4 +1,5 @@
 {
+
   "compilerOptions": {
     "module": "commonjs",
     "declaration": true,
@@ -18,4 +19,5 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false
   }
+  
 }
