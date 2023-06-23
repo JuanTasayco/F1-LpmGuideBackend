@@ -25,7 +25,8 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
     LpmModule,
     SeedModule,
     AuthModule,
-    CloudinaryModule],
+    CloudinaryModule,
+],
 })
 export class AppModule { }
 
