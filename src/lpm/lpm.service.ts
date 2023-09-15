@@ -107,8 +107,25 @@ export class LpmService {
   }
 
   async findAll() {
-    const section = await this.lpmRepository.find();
-    return section;
+    try {
+      const section = await this.lpmRepository.find();
+      return section;
+    } catch (error) {
+      this.handlerError(error);
+    }
+  }
+
+  async findAllSections() {
+    try {
+      const results = await this.lpmRepository.find();
+      const sections = Array.from(
+        new Set(results.map((result) => result.seccion)),
+      );
+
+      return sections;
+    } catch (error) {
+      this.handlerError(error);
+    }
   }
 
   async findOne(id: string) {

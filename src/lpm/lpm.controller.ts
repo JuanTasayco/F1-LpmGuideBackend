@@ -36,6 +36,11 @@ export class LpmController {
     return this.lpmService.findManyTitles(id);
   }
 
+  @Get('sections/all')
+  findSections() {
+    return this.lpmService.findAllSections();
+  }
+
   @Get('sections/:id')
   findOnlySections(@Param('id') id: string) {
     return this.lpmService.findManySections(id);
