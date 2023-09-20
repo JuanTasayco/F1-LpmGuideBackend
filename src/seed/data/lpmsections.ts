@@ -393,7 +393,7 @@ const informacion: Secciones[] = [
     subtitulo:
       'La renta aquí se calcula en base al mes declarado por primera vez y el total anual. Teniendo en cuenta que son 14 sueldos, si declaramos por primera vez en Enero, tendríamos total-anual/14, si declaramos en Febrero sería total/13, para Marzo total/12 etc, el resultado se va declarando mes a mes desde ese punto en adelante. Si estamos en Julio, el salto es de 2, es decir si en Junio es /9, para Julio será /7.',
     panel: 'Panel Renta Externa',
-    seccion: 'especiales',
+    seccion: 'renta',
     ingreso: [
       {
         subtitles:
@@ -433,7 +433,7 @@ const informacion: Secciones[] = [
     subtitulo:
       'Recuerda que si modificas la ficha de un trabajador después de haber insertado valores, estos datos no se actualizarán automáticamente. Puedes borrar el valor y volverlo a insertar en tabla de valores siempre y cuando no hayas ingresado registros ya que se borrarán, lo recomendable es ajustar los valores manualmente.',
     panel: 'Panel Usuarios',
-    seccion: 'mantenimiento',
+    seccion: 'trabajadores',
     ingreso: [
       {
         subtitles:
@@ -461,7 +461,7 @@ const informacion: Secciones[] = [
       'Antes de ingresar algún trabajador nuevo. Verificar si ya ha formado parte de la plantilla anteriormente, recuerda que cuando un trabajador es cesado no se borra de manera permanente, solo va al contenedor de BAJAS.',
     titulo2: 'Ingresar Trabajadores',
     panel: 'Panel Usuarios',
-    seccion: 'mantenimiento',
+    seccion: 'trabajadores',
     ingreso: [
       {
         subtitles:
@@ -557,7 +557,7 @@ const informacion: Secciones[] = [
     subtitulo:
       'Es probable que se haya intentado cesar al trabajador directamente desde su ficha antes de insertar valores,esto es un error. Ya que si se cesa antes, este no aparecerá en la planilla del mes. Pero también si no se hace después, seguirá apareciendo en meses posteriores.',
     panel: 'Panel Cese',
-    seccion: 'mantenimiento',
+    seccion: 'trabajadores',
     ingreso: [
       {
         subtitles:
@@ -742,7 +742,7 @@ const informacion: Secciones[] = [
     subtitulo:
       'La renta de 5ta no es un monto que vamos a modificar, esto lo hace únicamente el sistema de manera automática.Existen formas para modificarla manualmente, pero no se recomienda, por lo tanto no se enseñará.',
     panel: 'Panel Renta',
-    seccion: 'registros',
+    seccion: 'renta',
     ingreso: [
       {
         subtitles: 'Vamos a Procesos/ calculo renta 5ta',

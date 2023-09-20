@@ -157,13 +157,16 @@ export class LpmService {
 
   async findManySections(termino: string) {
     let section!: Lpm[];
+    console.log(termino);
     const queryBuilder = this.lpmRepository.createQueryBuilder('prod');
     section = await queryBuilder
       .where(`seccion =:termino`, {
         termino: `${termino}`,
       })
       .getMany();
-    if (!section) throw new NotFoundException(`${termino} dont exist`);
+    console.log(section);
+    if (!section || section.length == 0)
+      throw new NotFoundException(`${termino} dont exist`);
     return section;
   }
 
