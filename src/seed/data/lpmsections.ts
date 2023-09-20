@@ -763,3 +763,36 @@ const informacion: Secciones[] = [
     ],
   },
 ];
+
+/* {
+    "titulo": "ceses",
+    "titulo2": "Cesar trabajadores",
+    "subtitulo":
+      "Es probable que se haya intentado cesar al trabajador directamente desde su ficha antes de insertar valores,esto es un error. Ya que si se cesa antes, este no aparecerá en la planilla del mes. Pero también si no se hace después, seguirá apareciendo en meses posteriores.",
+    "panel": "Panel Cese",
+    "seccion": "trabajadores",
+    "ingreso": [
+      {
+        "subtitles":
+          "Para agregar la fecha de cese a un trabajador ir a valores.",
+        "imagesUrl": ""
+      }
+    ],
+    "contenido": [
+      {
+        "subtitles":
+          "Una vez en valores dar doble clic al trabajador y colocar la fecha de cese y el motivo.No es necesario procesar nada, si en un caso el trabajador fue cesado meses anteriores y sigue apareciendo aquí, eliminarlo con el ícono del lápiz de la parte superior izquierda.",
+        "imagesUrl": ""
+      },
+      {
+        "subtitles":
+          "Posteriormente ir a ficha del trabajador, seleccionar al trabajador e ir a Datos del empleo. En situación de trabajador indicar BAJA y colocar la fecha de CESE.Este procedimiento hace que el trabajador cesado no aparezca al mes siguiente. Para verificar la fecha de cese es suficiente con ir al reporte de planilla y/o boleta",
+        "imagesUrl": ""
+      },
+      {
+        "subtitles":
+          "Nota: Si el trabajador sigue apareciendo en el periodo siguiente, basta con eliminar al trabajador de la tabla de valores verificar de manera estricta que se haya agregado correctamente el cese en la FICHA personal del trabajador",
+        "imagesUrl": ""
+      }
+    ]
+  } */

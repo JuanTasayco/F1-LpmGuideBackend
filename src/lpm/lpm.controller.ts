@@ -41,9 +41,9 @@ export class LpmController {
     return this.lpmService.findAllSections();
   }
 
-  @Get('sections/:id')
-  findOnlySections(@Param('id') id: string) {
-    return this.lpmService.findManySections(id);
+  @Get('sections/:termino')
+  findOnlySections(@Param('termino') termino: string) {
+    return this.lpmService.findManySections(termino);
   }
 
   @Patch('section/:id')
@@ -63,5 +63,10 @@ export class LpmController {
   @Post('delete/cloudimage')
   deleteCloudinaryImages(@Body() publicIds: string[]) {
     return this.lpmService.deleteCloudinaryImages(publicIds);
+  }
+
+  @Delete('delete/all')
+  deleteSeedData() {
+    return this.lpmService.deleteAll();
   }
 }

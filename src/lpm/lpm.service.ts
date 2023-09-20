@@ -7,7 +7,6 @@ import { Lpm, LpmContentImages, LpmContentImagesIngreso } from './entities';
 import { validate as validUuid } from 'uuid';
 import { UpdateLpmDto } from './dto/update-lpm.dto';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
-import { UploadApiErrorResponse, UploadApiResponse } from 'cloudinary';
 import { ContentImagesLpm } from 'src/seed/interfaces/content.class.interface';
 
 @Injectable()
@@ -97,6 +96,7 @@ export class LpmService {
 
       await this.lpmRepository.save(seccion);
       this.imagenesEnCaliente = [];
+      console.log(seccion);
       return seccion;
     } catch (error) {
       this.cloudinary.deleteImagesCloud(this.imagenesEnCaliente);
@@ -110,19 +110,6 @@ export class LpmService {
     try {
       const section = await this.lpmRepository.find();
       return section;
-    } catch (error) {
-      this.handlerError(error);
-    }
-  }
-
-  async findAllSections() {
-    try {
-      const results = await this.lpmRepository.find();
-      const sections = Array.from(
-        new Set(results.map((result) => result.seccion)),
-      );
-
-      return sections;
     } catch (error) {
       this.handlerError(error);
     }
@@ -157,17 +144,30 @@ export class LpmService {
 
   async findManySections(termino: string) {
     let section!: Lpm[];
-    console.log(termino);
+    /* el contenido adicional de id existe, pero no lo muestra esta busqueda */
     const queryBuilder = this.lpmRepository.createQueryBuilder('prod');
     section = await queryBuilder
       .where(`seccion =:termino`, {
         termino: `${termino}`,
       })
       .getMany();
-    console.log(section);
+
     if (!section || section.length == 0)
       throw new NotFoundException(`${termino} dont exist`);
     return section;
+  }
+
+  async findAllSections() {
+    try {
+      const results = await this.lpmRepository.find();
+      const sections = Array.from(
+        new Set(results.map((result) => result.seccion)),
+      );
+
+      return sections;
+    } catch (error) {
+      this.handlerError(error);
+    }
   }
 
   getIdClouds(items: ContentImagesLpm[]) {
@@ -237,6 +237,13 @@ export class LpmService {
       value: 'ok',
       msg: 'imagenes destruidas',
     };
+  }
+
+  async deleteAll() {
+    const secciones: Lpm[] = await this.findAll();
+    for (let seccion of secciones) {
+      this.lpmRepository.remove(seccion);
+    }
   }
 
   /* method for errors */
