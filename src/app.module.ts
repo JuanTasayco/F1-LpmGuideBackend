@@ -8,7 +8,10 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: ['.env', '.env.prod'],
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
@@ -18,9 +21,9 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
       database: process.env.DB_NAME,
       synchronize: true,
       autoLoadEntities: true,
-      ssl: {
+      /*  ssl: {
         rejectUnauthorized: false,
-      },
+      }, */
     }),
     LpmModule,
     SeedModule,
