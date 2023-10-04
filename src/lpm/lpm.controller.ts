@@ -26,19 +26,22 @@ export class LpmController {
     return this.lpmService.findAll();
   }
 
+  /* pide titulo exacto */
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.lpmService.findOne(id);
   }
 
+  /* si colocas tard buscará todas las coincidencias */
   @Get('titles/:id')
   findMany(@Param('id') id: string) {
     return this.lpmService.findManyTitles(id);
   }
 
-  @Get('sections/all')
+  /* estoy cambiando de nombre */
+  @Get('sections/names/all')
   findSections() {
-    return this.lpmService.findAllSections();
+    return this.lpmService.findAllSectionsName();
   }
 
   @Get('sections/:termino')

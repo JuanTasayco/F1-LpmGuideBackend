@@ -157,7 +157,7 @@ export class LpmService {
     return section;
   }
 
-  async findAllSections() {
+  async findAllSectionsName() {
     try {
       const results = await this.lpmRepository.find();
       const sections = Array.from(
