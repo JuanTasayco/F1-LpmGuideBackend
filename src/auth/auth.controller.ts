@@ -15,9 +15,7 @@ import { CreateAuthDto } from './dto/create-auth.dto';
 import { LoginAuthDto } from './dto/login-auto.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { User as UserEntity } from './entities/auth.entity';
-import { RoleProtectedGuard } from './guards/role-protected/role-protected.guard';
 import { ValidRoles } from './interfaces/valid-roles';
-import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {

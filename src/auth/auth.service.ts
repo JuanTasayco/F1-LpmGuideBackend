@@ -82,14 +82,19 @@ export class AuthService {
     return user;
   }
   async updateUserByID(id: string, body: UpdateAuthDto) {
-    const user = await this.userRepository.preload({ id, ...body });
-    if (!user) throw new NotFoundException(`id:${id} dont exist`);
-    const { password, ...rest } = user;
-    await this.userRepository.save({
-      ...rest,
-      password: bcrypt.hashSync(password, 10),
-    });
-    return user;
+    try {
+      const user = await this.userRepository.preload({ id, ...body });
+      if (!user) throw new NotFoundException(`id:${id} dont exist`);
+
+      const { password, ...rest } = user;
+      await this.userRepository.save({
+        ...rest,
+        password: bcrypt.hashSync(password, 10),
+      });
+      return user;
+    } catch (error) {
+      this.errors(error);
+    }
   }
 
   async deleteUser(id: string) {
@@ -98,7 +103,7 @@ export class AuthService {
       this.userRepository.remove(user);
       return true;
     } catch (error) {
-      console.log(error);
+      this.errors(error);
     }
   }
 

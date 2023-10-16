@@ -21,9 +21,10 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
       database: process.env.DB_NAME,
       synchronize: true,
       autoLoadEntities: true,
-       ssl: {
+      /* activar cuando mandas commits */
+    /*    ssl: {
         rejectUnauthorized: false,
-      },
+      }, */
     }),
     LpmModule,
     SeedModule,
