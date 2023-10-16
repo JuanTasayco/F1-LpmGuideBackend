@@ -22,9 +22,9 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
       synchronize: true,
       autoLoadEntities: true,
       /* activar cuando mandas commits */
-    /*    ssl: {
+      ssl: {
         rejectUnauthorized: false,
-      }, */
+      },
     }),
     LpmModule,
     SeedModule,
