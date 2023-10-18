@@ -81,16 +81,18 @@ export class AuthService {
     if (!user) throw new BadRequestException(`${id} dont exist`);
     return user;
   }
+
   async updateUserByID(id: string, body: UpdateAuthDto) {
+    console.log(body);
     try {
+      let { password, ...rest } = body;
+      if (password) body.password = bcrypt.hashSync(password, 10);
+
       const user = await this.userRepository.preload({ id, ...body });
       if (!user) throw new NotFoundException(`id:${id} dont exist`);
 
-      const { password, ...rest } = user;
-      await this.userRepository.save({
-        ...rest,
-        password: bcrypt.hashSync(password, 10),
-      });
+      /*   const { password, ...rest } = user; */
+      await this.userRepository.save(user);
       return user;
     } catch (error) {
       this.errors(error);
