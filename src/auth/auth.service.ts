@@ -82,6 +82,19 @@ export class AuthService {
     return user;
   }
 
+  async findUsersByWord(word: string) {
+    let currentUsers: User[] = [];
+
+    const queryBuilder = this.userRepository.createQueryBuilder('userBuilder');
+    currentUsers = await queryBuilder
+      .where(`nombre ilike :word`, {
+        word: `%${word}%`,
+      })
+      .getMany();
+
+    return currentUsers;
+  }
+
   async updateUserByID(id: string, body: UpdateAuthDto) {
     console.log(body);
     try {

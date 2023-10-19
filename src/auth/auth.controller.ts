@@ -46,6 +46,11 @@ export class AuthController {
     return this.authService.findOne(id);
   }
 
+  @Get('users/:term')
+  findByUsersByTerm(@Param('term') termino: string) {
+    return this.authService.findUsersByWord(termino);
+  }
+
   @Post('updateUser/:id')
   updateUserById(@Param('id') id: string, @Body() body: UpdateAuthDto) {
     return this.authService.updateUserByID(id, body);
