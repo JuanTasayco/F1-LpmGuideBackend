@@ -5,7 +5,7 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'text', nullable: false })
+  @Column({ type: 'text', default:'usuario' })
   nombre: string;
 
   @Column({ type: 'text', default: '' })

@@ -231,13 +231,13 @@ export class LpmService {
     return section;
   }
 
-  async deleteCloudinaryImages(images: string[]) {
+  /*   async deleteCloudinaryImages(images: string[]) {
     await this.cloudinary.deleteImagesCloud(images);
     return {
       value: 'ok',
       msg: 'imagenes destruidas',
     };
-  }
+  } */
 
   async deleteAll() {
     const secciones: Lpm[] = await this.findAll();

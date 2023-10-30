@@ -63,10 +63,12 @@ export class LpmController {
   }
 
   /* this methos is used for eliminated independent images in blocks (subtitles and imagesUrl) */
-  @Post('delete/cloudimage')
+  /* puede suceder que en la version 2 esto no funcione, intenta quitarlo para optimizar el código */
+
+  /*  @Post('delete/cloudimage')
   deleteCloudinaryImages(@Body() publicIds: string[]) {
     return this.lpmService.deleteCloudinaryImages(publicIds);
-  }
+  } */
 
   @Delete('delete/all')
   deleteSeedData() {

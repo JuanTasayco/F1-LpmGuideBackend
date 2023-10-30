@@ -85,18 +85,22 @@ export class AuthService {
   async findUsersByWord(word: string) {
     let currentUsers: User[] = [];
 
-    const queryBuilder = this.userRepository.createQueryBuilder('userBuilder');
-    currentUsers = await queryBuilder
-      .where(`nombre ilike :word`, {
-        word: `%${word}%`,
-      })
-      .getMany();
+    try {
+      const queryBuilder =
+        this.userRepository.createQueryBuilder('userBuilder');
+      currentUsers = await queryBuilder
+        .where(`nombre ilike :word`, {
+          word: `%${word}%`,
+        })
+        .getMany();
 
-    return currentUsers;
+      return currentUsers;
+    } catch (error) {
+      this.errors(error);
+    }
   }
 
   async updateUserByID(id: string, body: UpdateAuthDto) {
-    console.log(body);
     try {
       let { password, ...rest } = body;
       if (password) body.password = bcrypt.hashSync(password, 10);
@@ -119,6 +123,7 @@ export class AuthService {
       return true;
     } catch (error) {
       this.errors(error);
+      return false;
     }
   }
 

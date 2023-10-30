@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsEmail,
   IsIn,
   IsOptional,
@@ -10,10 +11,12 @@ import {
 
 export class CreateAuthDto {
   @IsString()
+  @IsOptional()
   @MinLength(1)
   nombre: string;
 
   @IsString()
+  @IsOptional()
   apellido: string;
 
   @IsString()
@@ -21,6 +24,7 @@ export class CreateAuthDto {
   email: string;
 
   @IsIn(['user', 'admin'], { message: 'El rol debe ser user o admin' })
+  @IsOptional()
   roles: string;
 
   @IsString()
@@ -47,4 +51,8 @@ export class CreateAuthDto {
       'The password must have a Uppercase, lowercase letter and a number',
   }) */
   password: string;
+  
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean;
 }

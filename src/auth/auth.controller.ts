@@ -64,6 +64,7 @@ export class AuthController {
       user,
     };
   }
+
   /*  */
   @Get('verify')
   @Auth(ValidRoles.admin)
